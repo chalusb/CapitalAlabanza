@@ -7,8 +7,14 @@ del Fire TV (abriendo el navegador Silk propio del Fire TV, sin laptop).
 ## Cómo funciona
 
 - `index.html` + `css/style.css` + `js/app.js`: toda la app.
-- `videos.json`: catálogo de videos. Cada entrada es `{ "id", "titulo", "url" }`.
-  `url` debe apuntar al archivo de video alojado en Cloudflare R2 (ver abajo).
+- `videos.json`: catálogo de videos seleccionables. Cada entrada es
+  `{ "id", "titulo", "url" }`. `url` debe apuntar al archivo de video alojado
+  en Cloudflare R2 (ver abajo).
+- `config.json`: video de intro fijo (`{ "intro": "url" }`). Si tiene una URL
+  válida, ese video se reproduce siempre primero, automáticamente, antes de
+  los que selecciones cada miércoles — no aparece en la cuadrícula de
+  selección. Si la URL no carga (por ejemplo, mientras dice el placeholder
+  de ejemplo), el sitio lo salta solo y sigue con tu selección normal.
 - No hay base de datos ni login: para agregar un video nuevo, subes el archivo
   a R2 y agregas una línea a `videos.json`.
 
@@ -37,6 +43,27 @@ Abre `videos.json` y reemplaza los ejemplos por tus videos reales:
 
 `id` puede ser cualquier texto único (sin espacios es más fácil). `titulo`
 es lo que se muestra en el botón grande.
+
+### Video de intro (opcional)
+
+En `tools/render-intro/` está la animación del logo armándose (HTML/CSS +
+Playwright) usada para generar `assets/intro.mp4`. Para regenerarla (por
+ejemplo si cambias el texto):
+
+```bash
+cd tools/render-intro
+npm install
+npx playwright install chromium
+node render.js
+# convierte el webm grabado a mp4 con el ffmpeg que trae ffmpeg-static
+```
+
+Una vez tengas el `intro.mp4` final, súbelo a R2 igual que los demás videos
+y pon esa URL en `config.json`:
+
+```json
+{ "intro": "https://pub-xxxxxxxx.r2.dev/intro.mp4" }
+```
 
 ## 3. Desplegar en Vercel (gratis)
 

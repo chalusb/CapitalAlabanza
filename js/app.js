@@ -18,6 +18,7 @@
   var selectedOrder = []; // array of video ids, in the order clicked
   var playQueue = [];
   var playIndex = 0;
+  var introUrl = null;
 
   function showView(name) {
     Object.keys(views).forEach(function (key) {
@@ -26,7 +27,19 @@
   }
 
   function loadVideos() {
-    fetch("videos.json", { cache: "no-store" })
+    fetch("config.json", { cache: "no-store" })
+      .then(function (res) {
+        return res.ok ? res.json() : {};
+      })
+      .catch(function () {
+        return {};
+      })
+      .then(function (config) {
+        introUrl = config && config.intro ? config.intro : null;
+      })
+      .then(function () {
+        return fetch("videos.json", { cache: "no-store" });
+      })
       .then(function (res) {
         return res.json();
       })
@@ -109,6 +122,9 @@
         });
       })
       .filter(Boolean);
+    if (introUrl) {
+      playQueue.unshift({ id: "__intro__", titulo: "Intro", url: introUrl });
+    }
     playIndex = 0;
     showView("player");
     startPlayback();
@@ -137,6 +153,13 @@
   }
 
   video.addEventListener("ended", function () {
+    playIndex += 1;
+    playCurrent();
+  });
+
+  video.addEventListener("error", function () {
+    // Si un video de la cola no carga (p.ej. la URL del intro aun no
+    // se configuro en config.json), no se traba: pasa al siguiente.
     playIndex += 1;
     playCurrent();
   });

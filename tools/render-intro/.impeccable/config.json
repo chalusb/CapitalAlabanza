@@ -1,0 +1,14 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "bounce-easing",
+        "value": "cubic-bezier(0.34, 1.56, 0.64, 1)",
+        "createdAt": "2026-08-27T17:45:56.876Z",
+        "reason": "Intentional overshoot 'settle pop' on the logo after it assembles in a one-shot marketing intro video, not a UI interaction — reviewed via rendered frames, reads as a deliberate punch/snap accent rather than tacky bounce"
+      }
+    ]
+  }
+}
