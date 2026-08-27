@@ -1,0 +1,17 @@
+[
+  {
+    "id": "ejemplo-1",
+    "titulo": "Nombre de la alabanza 1",
+    "url": "https://REEMPLAZA-CON-TU-DOMINIO-R2.example.com/alabanza-1.mp4"
+  },
+  {
+    "id": "ejemplo-2",
+    "titulo": "Nombre de la alabanza 2",
+    "url": "https://REEMPLAZA-CON-TU-DOMINIO-R2.example.com/alabanza-2.mp4"
+  },
+  {
+    "id": "ejemplo-3",
+    "titulo": "Nombre de la alabanza 3",
+    "url": "https://REEMPLAZA-CON-TU-DOMINIO-R2.example.com/alabanza-3.mp4"
+  }
+]

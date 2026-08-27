@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alabanzas</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <section id="view-selection" class="view active">
+    <div class="header">
+      <h1>Selecciona las alabanzas</h1>
+      <p>Toca cada video en el orden en que se van a poner</p>
+    </div>
+    <div id="grid"></div>
+    <div class="footer-bar">
+      <button id="clear-btn" type="button" class="btn btn-secondary">Limpiar selección</button>
+      <button id="play-btn" type="button" class="btn btn-primary" disabled>▶ Reproducir</button>
+    </div>
+  </section>
+
+  <section id="view-player" class="view">
+    <video id="video-player" autoplay playsinline></video>
+    <div id="player-status"></div>
+  </section>
+
+  <section id="view-end" class="view">
+    <h2>Alabanza terminada</h2>
+    <button id="replay-btn" type="button" class="btn btn-primary">Volver a selección</button>
+  </section>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
