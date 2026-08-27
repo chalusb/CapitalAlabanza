@@ -20,37 +20,42 @@ del Fire TV (abriendo el navegador Silk propio del Fire TV, sin laptop).
 
 ## 1. Subir los videos a Cloudflare R2
 
-1. Crea una cuenta gratis en https://dash.cloudflare.com/sign-up
-2. En el panel, ve a **R2** y crea un bucket, por ejemplo `alabanzas`.
-3. Sube ahí tus archivos `.mp4` (arrastrar y soltar desde el panel funciona).
-4. Activa acceso público de lectura al bucket (**R2 > tu bucket > Settings >
-   Public Access**) y copia la URL pública que te da Cloudflare (algo como
-   `https://pub-xxxxxxxx.r2.dev`), o conecta un dominio propio al bucket si
-   prefieres una URL más bonita.
-5. La URL final de cada video queda así:
-   `https://pub-xxxxxxxx.r2.dev/nombre-del-archivo.mp4`
+Usamos un subdominio de un dominio que ya tienes en Cloudflare
+(`cssoftware.org`, apuntado a Railway para la app principal) para alojar los
+videos — un subdominio es independiente de lo que apunte la raíz del
+dominio, así que no afecta nada de lo que ya está en Railway.
+
+1. En el dashboard de Cloudflare, ve a **R2** y crea un bucket (si no existe
+   ya), por ejemplo `alabanzas`.
+2. Sube ahí tus 19 archivos `.mp4` **nombrados exactamente igual que el
+   `id` de cada entrada en `videos.json`** (por ejemplo
+   `alaba-a-dios-danny-berrios.mp4`), más `intro.mp4`.
+3. En el bucket, ve a **Settings > Custom Domains > Connect Domain** y
+   escribe `alabanzascapital.cssoftware.org`. Cloudflare crea el registro
+   DNS solo — no hay que tocar nada de lo que ya está configurado para
+   Railway.
+4. Listo: cada video queda en
+   `https://alabanzascapital.cssoftware.org/<id>.mp4`.
 
 ## 2. Editar el catálogo
 
 `videos.json` ya tiene cargadas las 19 alabanzas de `D:\Musica\Alabanzas`,
-cada una con la URL apuntando a `https://REEMPLAZA-CON-TU-DOMINIO-R2.example.com/<id>.mp4`.
-Para dejarlo funcionando, cuando subas los archivos a R2, **nómbralos igual
-que el `id` de cada entrada** (por ejemplo `alaba-a-dios-danny-berrios.mp4`)
-y luego solo tienes que reemplazar `REEMPLAZA-CON-TU-DOMINIO-R2.example.com`
-por tu dominio real de R2 en todo el archivo — no hace falta tocar cada URL
-a mano.
+cada una con la URL apuntando a
+`https://alabanzascapital.cssoftware.org/<id>.mp4`. En cuanto subas los
+archivos a R2 con esos mismos nombres, empieza a funcionar solo — no hay
+que tocar `videos.json` para esto.
 
 Si agregas una alabanza nueva más adelante, el patrón es el mismo:
 
 ```json
 [
-  { "id": "firme-en-tu-amor", "titulo": "Firme en tu amor", "url": "https://pub-xxxxxxxx.r2.dev/firme-en-tu-amor.mp4" },
-  { "id": "gracia-sublime",   "titulo": "Gracia sublime",   "url": "https://pub-xxxxxxxx.r2.dev/gracia-sublime.mp4" }
+  { "id": "firme-en-tu-amor", "titulo": "Firme en tu amor", "url": "https://alabanzascapital.cssoftware.org/firme-en-tu-amor.mp4" }
 ]
 ```
 
-`id` puede ser cualquier texto único (sin espacios es más fácil). `titulo`
-es lo que se muestra en el botón grande.
+`id` puede ser cualquier texto único (sin espacios es más fácil, y debe
+coincidir con el nombre del archivo que subas a R2). `titulo` es lo que se
+muestra en el botón grande.
 
 ### Video de intro (opcional)
 
@@ -67,11 +72,8 @@ node render.js
 ```
 
 Una vez tengas el `intro.mp4` final, súbelo a R2 igual que los demás videos
-y pon esa URL en `config.json`:
-
-```json
-{ "intro": "https://pub-xxxxxxxx.r2.dev/intro.mp4" }
-```
+(`config.json` ya apunta a
+`https://alabanzascapital.cssoftware.org/intro.mp4`).
 
 ## 3. Desplegar en Vercel (gratis)
 

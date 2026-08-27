@@ -12,6 +12,7 @@
     <div class="header">
       <h1>Selecciona las alabanzas</h1>
       <p>Toca 4 videos, en el orden en que se van a poner</p>
+      <button id="shuffle-btn" type="button" class="btn btn-shuffle">🔀 Sorpréndeme</button>
     </div>
     <div id="grid"></div>
     <div class="footer-bar">
@@ -22,13 +23,43 @@
 
   <section id="view-player" class="view">
     <video id="video-player" autoplay playsinline></video>
-    <div id="player-status"></div>
+    <div id="player-controls">
+      <button id="close-btn" type="button" class="ctrl-btn ctrl-btn-close" aria-label="Cerrar">
+        <svg viewBox="0 0 24 24"><path d="M6 6L18 18M18 6L6 18" stroke="#fff" stroke-width="2.5" stroke-linecap="round" fill="none"/></svg>
+      </button>
+      <div id="player-status"></div>
+      <div id="control-buttons">
+        <button id="prev-btn" type="button" class="ctrl-btn" aria-label="Anterior">
+          <svg viewBox="0 0 24 24"><path d="M18 5v14l-8.5-7L18 5zM6 5h2v14H6z"/></svg>
+        </button>
+        <button id="pause-btn" type="button" class="ctrl-btn ctrl-btn-main" aria-label="Pausa">
+          <svg id="pause-icon" viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
+        </button>
+        <button id="next-btn" type="button" class="ctrl-btn" aria-label="Siguiente">
+          <svg viewBox="0 0 24 24"><path d="M6 5v14l8.5-7L6 5zM16 5h2v14h-2z"/></svg>
+        </button>
+      </div>
+      <div id="progress-row">
+        <input id="seek-bar" type="range" min="0" max="100" step="0.1" value="0" aria-label="Progreso" />
+        <span id="progress-time">0:00 / 0:00</span>
+      </div>
+    </div>
   </section>
 
   <section id="view-end" class="view">
+    <img src="assets/logo-white.jpg" alt="Comunidad Capital Alabanzas" class="end-logo" />
     <h2>Alabanza terminada</h2>
+    <button id="like-btn" type="button" class="like-btn" aria-label="Me gusta">
+      <svg viewBox="0 0 24 24">
+        <path d="M12 21s-6.7-4.35-9.3-8.03C.86 10.3 1.1 6.9 3.6 5.1 5.6 3.66 8.2 4.1 9.9 6.02L12 8.3l2.1-2.28c1.7-1.92 4.3-2.36 6.3-.92 2.5 1.8 2.74 5.2 0.9 7.87C18.7 16.65 12 21 12 21z"/>
+      </svg>
+    </button>
     <button id="replay-btn" type="button" class="btn btn-primary">Volver a selección</button>
   </section>
+
+  <footer id="site-footer">
+    Desarrollado por <a id="footer-link" href="https://cssoftware.org" target="_blank" rel="noopener">CSSoftware</a>
+  </footer>
 
   <script src="js/app.js"></script>
 </body>
