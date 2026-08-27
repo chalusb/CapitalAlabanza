@@ -14,6 +14,8 @@
   var playerStatus = document.getElementById("player-status");
   var replayBtn = document.getElementById("replay-btn");
 
+  var REQUIRED_SELECTIONS = 4;
+
   var allVideos = [];
   var selectedOrder = []; // array of video ids, in the order clicked
   var playQueue = [];
@@ -75,12 +77,16 @@
   function toggleSelect(id, card) {
     var idx = selectedOrder.indexOf(id);
     if (idx === -1) {
+      if (selectedOrder.length >= REQUIRED_SELECTIONS) return;
       selectedOrder.push(id);
     } else {
       selectedOrder.splice(idx, 1);
     }
     refreshBadges();
     updatePlayButton();
+    if (selectedOrder.length === REQUIRED_SELECTIONS) {
+      playBtn.focus();
+    }
   }
 
   function refreshBadges() {
@@ -100,11 +106,12 @@
   }
 
   function updatePlayButton() {
-    playBtn.disabled = selectedOrder.length === 0;
+    var remaining = REQUIRED_SELECTIONS - selectedOrder.length;
+    playBtn.disabled = remaining !== 0;
     playBtn.textContent =
-      selectedOrder.length === 0
+      remaining <= 0
         ? "▶ Reproducir"
-        : "▶ Reproducir (" + selectedOrder.length + ")";
+        : "Selecciona " + remaining + " más";
   }
 
   clearBtn.addEventListener("click", function () {
@@ -114,7 +121,7 @@
   });
 
   playBtn.addEventListener("click", function () {
-    if (selectedOrder.length === 0) return;
+    if (selectedOrder.length !== REQUIRED_SELECTIONS) return;
     playQueue = selectedOrder
       .map(function (id) {
         return allVideos.find(function (v) {

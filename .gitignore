@@ -4,3 +4,4 @@ Thumbs.db
 node_modules
 tools/render-intro/output
 assets/*.mp4
+local-videos

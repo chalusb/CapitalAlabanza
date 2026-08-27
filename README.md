@@ -32,7 +32,15 @@ del Fire TV (abriendo el navegador Silk propio del Fire TV, sin laptop).
 
 ## 2. Editar el catálogo
 
-Abre `videos.json` y reemplaza los ejemplos por tus videos reales:
+`videos.json` ya tiene cargadas las 19 alabanzas de `D:\Musica\Alabanzas`,
+cada una con la URL apuntando a `https://REEMPLAZA-CON-TU-DOMINIO-R2.example.com/<id>.mp4`.
+Para dejarlo funcionando, cuando subas los archivos a R2, **nómbralos igual
+que el `id` de cada entrada** (por ejemplo `alaba-a-dios-danny-berrios.mp4`)
+y luego solo tienes que reemplazar `REEMPLAZA-CON-TU-DOMINIO-R2.example.com`
+por tu dominio real de R2 en todo el archivo — no hace falta tocar cada URL
+a mano.
+
+Si agregas una alabanza nueva más adelante, el patrón es el mismo:
 
 ```json
 [
@@ -84,9 +92,11 @@ y pon esa URL en `config.json`:
    de Amazon si no lo tienes).
 2. Escribe la URL de tu sitio (o guárdala como marcador/página de inicio para
    no tener que escribirla cada miércoles).
-3. Navega con las flechas del control remoto entre los videos, selecciona
-   los que van a poner (se numeran en el orden que los toques), y dale
-   "Reproducir". Se pone en pantalla completa y corre uno tras otro.
+3. Navega con las flechas del control remoto entre los videos y selecciona
+   4 (se numeran en el orden que los toques). El botón dice "Selecciona N
+   más" mientras falten, y al tocar el cuarto el foco salta solo al botón
+   "Reproducir" — solo hay que darle OK. Se pone en pantalla completa y
+   corre uno tras otro.
 4. Con el botón de "Atrás"/"Back" del control puedes salir de la reproducción
    en cualquier momento y regresar a la pantalla de selección.
 
