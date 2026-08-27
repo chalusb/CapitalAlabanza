@@ -1,0 +1,143 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 1920px;
+    height: 1080px;
+    background: #000000;
+    overflow: hidden;
+    font-family: "Segoe UI", Arial, sans-serif;
+  }
+  #scene {
+    position: relative;
+    width: 1920px;
+    height: 1080px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #000000;
+    animation: sceneFadeOut 0.4s ease-in 3.8s forwards;
+  }
+  #logo-wrap {
+    position: relative;
+    width: 360px;
+    height: 360px;
+    margin-bottom: 48px;
+    animation: settlePulse 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) 1.25s both;
+  }
+  .wedge {
+    position: absolute;
+    inset: 0;
+    background-image: url("../../assets/logo-white.jpg");
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    animation-name: wedgeIn;
+    animation-duration: 0.9s;
+    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+    animation-fill-mode: forwards;
+  }
+  @keyframes wedgeIn {
+    0% {
+      opacity: 0;
+      transform: translate(var(--tx), var(--ty)) rotate(var(--rot)) scale(0.6);
+    }
+    70% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 1;
+      transform: translate(0, 0) rotate(0deg) scale(1);
+    }
+  }
+  @keyframes settlePulse {
+    0% { transform: scale(1); }
+    55% { transform: scale(1.07); }
+    100% { transform: scale(1); }
+  }
+  #title {
+    font-size: 62px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: #f4f1ea;
+    opacity: 0;
+    transform: translateY(24px);
+    animation: textUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 1.7s forwards;
+  }
+  #subtitle {
+    margin-top: 18px;
+    font-size: 26px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    color: #9aa3b8;
+    opacity: 0;
+    transform: translateY(16px);
+    animation: textUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) 2.2s forwards;
+  }
+  #subtitle b {
+    color: #e8a33d;
+    font-weight: 700;
+  }
+  @keyframes textUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes sceneFadeOut {
+    to { opacity: 0; }
+  }
+</style>
+</head>
+<body>
+  <div id="scene">
+    <div id="logo-wrap"></div>
+    <div id="title">Gracias</div>
+    <div id="subtitle">Impulsado por <b>CSSoftware</b></div>
+  </div>
+
+  <script>
+    // Build 6 pie-slice wedges of the logo, flying in from alternating
+    // directions to converge into the assembled logo.
+    var wrap = document.getElementById("logo-wrap");
+    var slices = 6;
+    var R = 160; // percent radius, overshoots the box on purpose
+
+    function polar(angleDeg, r) {
+      var rad = (angleDeg - 90) * Math.PI / 180; // 0deg = up
+      var x = 50 + r * Math.cos(rad);
+      var y = 50 + r * Math.sin(rad);
+      return x.toFixed(2) + "% " + y.toFixed(2) + "%";
+    }
+
+    var flyDirs = [
+      { tx: "-70vw", ty: "-40vh", rot: "-140deg" },
+      { tx: "70vw", ty: "-40vh", rot: "140deg" },
+      { tx: "-80vw", ty: "0vh", rot: "-200deg" },
+      { tx: "80vw", ty: "0vh", rot: "200deg" },
+      { tx: "-70vw", ty: "45vh", rot: "-100deg" },
+      { tx: "70vw", ty: "45vh", rot: "100deg" }
+    ];
+
+    for (var i = 0; i < slices; i++) {
+      var start = i * (360 / slices);
+      var end = (i + 1) * (360 / slices);
+      var pts = ["50% 50%"];
+      var steps = 6;
+      for (var s = 0; s <= steps; s++) {
+        var a = start + (end - start) * (s / steps);
+        pts.push(polar(a, R));
+      }
+      var wedge = document.createElement("div");
+      wedge.className = "wedge";
+      wedge.style.clipPath = "polygon(" + pts.join(", ") + ")";
+      wedge.style.setProperty("--tx", flyDirs[i].tx);
+      wedge.style.setProperty("--ty", flyDirs[i].ty);
+      wedge.style.setProperty("--rot", flyDirs[i].rot);
+      wedge.style.animationDelay = (i * 0.07) + "s";
+      wrap.appendChild(wedge);
+    }
+  </script>
+</body>
+</html>

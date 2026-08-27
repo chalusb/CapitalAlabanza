@@ -24,6 +24,8 @@
   var progressTime = document.getElementById("progress-time");
   var likeBtn = document.getElementById("like-btn");
   var siteFooter = document.getElementById("site-footer");
+  var countSelect = document.getElementById("count-select");
+  var countLabel = document.getElementById("count-label");
 
   video.volume = 1;
   video.muted = false;
@@ -39,6 +41,7 @@
   var playQueue = [];
   var playIndex = 0;
   var introUrl = null;
+  var outroUrl = null;
   var controlsVisible = false;
   var hideTimer = null;
 
@@ -53,6 +56,16 @@
     likeBtn.classList.toggle("liked");
   });
 
+  countSelect.addEventListener("change", function () {
+    REQUIRED_SELECTIONS = parseInt(countSelect.value, 10);
+    countLabel.textContent = REQUIRED_SELECTIONS;
+    if (selectedOrder.length > REQUIRED_SELECTIONS) {
+      selectedOrder = selectedOrder.slice(0, REQUIRED_SELECTIONS);
+    }
+    refreshBadges();
+    updatePlayButton();
+  });
+
   function loadVideos() {
     fetch("config.json", { cache: "no-store" })
       .then(function (res) {
@@ -63,6 +76,7 @@
       })
       .then(function (config) {
         introUrl = config && config.intro ? config.intro : null;
+        outroUrl = config && config.outro ? config.outro : null;
       })
       .then(function () {
         return fetch("videos.json", { cache: "no-store" });
@@ -178,6 +192,9 @@
       .filter(Boolean);
     if (introUrl) {
       playQueue.unshift({ id: "__intro__", titulo: "Intro", url: introUrl });
+    }
+    if (outroUrl) {
+      playQueue.push({ id: "__outro__", titulo: "Gracias", url: outroUrl });
     }
     playIndex = 0;
     showView("player");

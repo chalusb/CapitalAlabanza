@@ -3,7 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Alabanzas</title>
+  <title>Alabanzas — Comunidad Capital</title>
+  <meta name="description" content="Selecciona y reproduce las alabanzas de Comunidad Capital, una tras otra y a pantalla completa." />
+  <meta name="theme-color" content="#0b0f19" />
+  <link rel="icon" href="assets/logo-white.jpg" type="image/jpeg" />
+  <meta property="og:title" content="Alabanzas — Comunidad Capital" />
+  <meta property="og:description" content="Selecciona y reproduce las alabanzas de Comunidad Capital, una tras otra y a pantalla completa." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="assets/logo-white.jpg" />
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
@@ -11,7 +18,19 @@
   <section id="view-selection" class="view active">
     <div class="header">
       <h1>Selecciona las alabanzas</h1>
-      <p>Toca 4 videos, en el orden en que se van a poner</p>
+      <p>Toca <span id="count-label">4</span> videos, en el orden en que se van a poner</p>
+      <label class="count-select-label" for="count-select">
+        ¿Cuántas?
+        <select id="count-select">
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4" selected>4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+          <option value="8">8</option>
+        </select>
+      </label>
       <button id="shuffle-btn" type="button" class="btn btn-shuffle">🔀 Sorpréndeme</button>
     </div>
     <div id="grid"></div>

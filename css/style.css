@@ -44,7 +44,7 @@ html, body {
 
 .header {
   text-align: center;
-  margin-bottom: 2vh;
+  margin-bottom: 1.2vh;
 }
 
 .header h1 {
@@ -59,25 +59,54 @@ html, body {
   margin: 0;
 }
 
+.count-select-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7vw;
+  font-size: 1.2vw;
+  color: var(--text-dim);
+  margin-top: 1.2vh;
+}
+
+#count-select {
+  font-size: 1.3vw;
+  font-weight: 700;
+  padding: 0.5vh 1vw;
+  border-radius: 10px;
+  border: 3px solid var(--text-dim);
+  background: var(--bg-card);
+  color: var(--text);
+  cursor: pointer;
+}
+
+#count-select:focus,
+#count-select:focus-visible {
+  outline: none;
+  border-color: var(--focus-ring);
+}
+
 #grid {
   flex: 1;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 2vh 2vw;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-auto-rows: 1fr;
+  gap: 1.4vh 1.2vw;
   overflow-y: auto;
-  padding: 1vh 0.5vw;
+  padding: 0.5vh 0.5vw;
 }
 
 .video-card {
   position: relative;
   background: linear-gradient(135deg, var(--bg-card), #1e2740);
   border: 4px solid transparent;
-  border-radius: 18px;
-  padding: 2.2vh 1.6vw;
-  min-height: 160px;
+  border-radius: 16px;
+  padding: 1.4vh 1.2vw;
+  min-height: 110px;
   color: var(--text);
-  font-size: 1.7vw;
+  font-size: 1.3vw;
   font-weight: 600;
+  line-height: 1.25;
   text-align: left;
   cursor: pointer;
   display: flex;
