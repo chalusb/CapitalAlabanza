@@ -88,25 +88,28 @@ html, body {
 
 #grid {
   flex: 1;
+  min-height: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(6, 1fr);
   grid-auto-rows: 1fr;
-  gap: 1.4vh 1.2vw;
-  overflow-y: auto;
-  padding: 0.5vh 0.5vw;
+  gap: 1vh 0.8vw;
+  overflow: hidden;
+  padding: 0.3vh 0.3vw;
 }
 
 .video-card {
   position: relative;
   background: linear-gradient(135deg, var(--bg-card), #1e2740);
   border: 4px solid transparent;
-  border-radius: 16px;
-  padding: 1.4vh 1.2vw;
-  min-height: 110px;
+  border-radius: 14px;
+  padding: 0.8vh 0.8vw;
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
   color: var(--text);
-  font-size: 1.3vw;
+  font-size: clamp(11px, 1.1vw, 16px);
   font-weight: 600;
-  line-height: 1.25;
+  line-height: 1.2;
   text-align: left;
   cursor: pointer;
   display: flex;
