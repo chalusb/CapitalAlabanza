@@ -24,7 +24,6 @@
   var progressTime = document.getElementById("progress-time");
   var likeBtn = document.getElementById("like-btn");
   var countSelect = document.getElementById("count-select");
-  var countLabel = document.getElementById("count-label");
 
   video.volume = 1;
   video.muted = false;
@@ -56,7 +55,6 @@
 
   countSelect.addEventListener("change", function () {
     REQUIRED_SELECTIONS = parseInt(countSelect.value, 10);
-    countLabel.textContent = REQUIRED_SELECTIONS;
     if (selectedOrder.length > REQUIRED_SELECTIONS) {
       selectedOrder = selectedOrder.slice(0, REQUIRED_SELECTIONS);
     }
