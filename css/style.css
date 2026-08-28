@@ -39,7 +39,15 @@ html, body {
 /* ---------- Selection view ---------- */
 
 #view-selection {
-  padding: 3vh 4vw 6.5vh;
+  padding: 0;
+}
+
+.selection-content {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 3vh 4vw;
 }
 
 .header {
@@ -374,12 +382,15 @@ html, body {
 
 /* ---------- End view ---------- */
 
-#view-end {
+.end-content {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
   gap: 3vh;
-  padding-bottom: 6.5vh;
 }
 
 #view-end h2 {
@@ -450,11 +461,9 @@ html, body {
 
 /* ---------- Footer ---------- */
 
-#site-footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
+.site-footer {
+  flex-shrink: 0;
+  width: 100%;
   height: 4.5vh;
   min-height: 34px;
   display: flex;
@@ -464,17 +473,16 @@ html, body {
   color: #1a1206;
   font-size: 1vw;
   font-weight: 600;
-  z-index: 10;
 }
 
-#site-footer a {
+.site-footer a {
   color: #1a1206;
   font-weight: 700;
   text-decoration: underline;
 }
 
-#site-footer a:hover,
-#site-footer a:focus {
+.site-footer a:hover,
+.site-footer a:focus {
   color: #000000;
   outline: none;
 }

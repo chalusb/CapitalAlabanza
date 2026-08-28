@@ -23,7 +23,6 @@
   var seekBar = document.getElementById("seek-bar");
   var progressTime = document.getElementById("progress-time");
   var likeBtn = document.getElementById("like-btn");
-  var siteFooter = document.getElementById("site-footer");
   var countSelect = document.getElementById("count-select");
   var countLabel = document.getElementById("count-label");
 
@@ -49,7 +48,6 @@
     Object.keys(views).forEach(function (key) {
       views[key].classList.toggle("active", key === name);
     });
-    siteFooter.style.display = name === "player" ? "none" : "";
   }
 
   likeBtn.addEventListener("click", function () {
