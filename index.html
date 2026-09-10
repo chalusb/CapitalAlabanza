@@ -39,6 +39,13 @@
         <button id="clear-btn" type="button" class="btn btn-secondary">Limpiar selección</button>
         <button id="play-btn" type="button" class="btn btn-primary" disabled>▶ Reproducir</button>
       </div>
+      <section class="bible-section" aria-label="Biblia Reina-Valera 1960">
+        <button id="bible-toggle" class="btn bible-toggle" type="button" aria-expanded="false" aria-controls="bible-panel">Biblia · Reina-Valera 1960 <span aria-hidden="true">＋</span></button>
+        <div id="bible-panel" hidden>
+          <div id="bible-content"></div>
+          <p id="bible-status" role="status" aria-live="polite"></p>
+        </div>
+      </section>
     </div>
     <div class="site-footer">
       <span>Desarrollado por <a href="https://cssoftware.org" target="_blank" rel="noopener">CSSoftware</a></span>
@@ -87,5 +94,6 @@
   </section>
 
   <script src="js/app.js"></script>
+  <script src="js/bible.js"></script>
 </body>
 </html>

@@ -44,6 +44,7 @@
   var hideTimer = null;
 
   function showView(name) {
+    document.dispatchEvent(new CustomEvent("app:viewchange", { detail: name }));
     Object.keys(views).forEach(function (key) {
       views[key].classList.toggle("active", key === name);
     });
@@ -470,7 +471,7 @@
     var bestScore = Infinity;
 
     candidates.forEach(function (el) {
-      if (el === current) return;
+      if (el === current || el.disabled || !el.getClientRects().length || el.closest("[hidden]")) return;
       var r = el.getBoundingClientRect();
       var ex = r.left + r.width / 2;
       var ey = r.top + r.height / 2;
