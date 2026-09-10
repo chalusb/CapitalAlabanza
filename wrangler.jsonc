@@ -4,10 +4,13 @@
   "main": "worker/index.js",
   "assets": {
     "directory": ".",
-    "binding": "ASSETS"
+    "binding": "ASSETS",
+    "run_worker_first": ["/api/*"]
   },
   "vars": {
     "AWS_REGION": "us-east-1",
-    "ALLOWED_ORIGIN": "alabanzascapital.cssoftware.org"
+    "ALLOWED_ORIGIN": "https://alabanzascapital.cssoftware.org",
+    "POLLY_VOICE_ID": "Andres",
+    "POLLY_LANGUAGE_CODE": "es-MX"
   }
 }

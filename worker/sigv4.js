@@ -38,6 +38,7 @@ export async function signAwsRequest({
   service,
   accessKeyId,
   secretAccessKey,
+  sessionToken,
   body,
   contentType,
 }) {
@@ -47,8 +48,9 @@ export async function signAwsRequest({
 
   const payloadHash = await sha256Hex(body);
   const canonicalHeaders =
-    `content-type:${contentType}\n` + `host:${host}\n` + `x-amz-date:${amzDate}\n`;
-  const signedHeaders = "content-type;host;x-amz-date";
+    `content-type:${contentType}\n` + `host:${host}\n` + `x-amz-date:${amzDate}\n` +
+    (sessionToken ? `x-amz-security-token:${sessionToken}\n` : "");
+  const signedHeaders = "content-type;host;x-amz-date" + (sessionToken ? ";x-amz-security-token" : "");
 
   const canonicalRequest = [
     method,
@@ -76,6 +78,7 @@ export async function signAwsRequest({
     `SignedHeaders=${signedHeaders}, Signature=${signature}`;
 
   return {
+    ...(sessionToken ? { "X-Amz-Security-Token": sessionToken } : {}),
     "Content-Type": contentType,
     "X-Amz-Date": amzDate,
     Authorization: authorization,

@@ -6,7 +6,7 @@
   var content = document.getElementById("bible-content");
   var status = document.getElementById("bible-status");
   var books, loading = false, step = "books", book = 0, chapter = 0, verse = 0;
-  var speech = window.speechSynthesis, utterance = null, readingMode = null;
+  var utterance = null, readingMode = null;
   var followReading = false;
 
   function pauseFollowing() {
@@ -36,7 +36,7 @@
     readingMode = null;
     followReading = false;
     content.querySelectorAll(".is-reading").forEach(function (item) { item.classList.remove("is-reading"); });
-    if (speech && wasReading) speech.cancel();
+    if (wasReading && window.stopSpeakText) window.stopSpeakText();
     var read = document.getElementById("bible-read");
     if (read) read.textContent = "Leer versículo seleccionado";
     var readChapter = document.getElementById("bible-read-chapter");
@@ -117,7 +117,7 @@
       read.id = "bible-read";
       var readChapter = button("Leer capítulo completo", function () { readAloud("chapter"); }, actions);
       readChapter.id = "bible-read-chapter";
-      if (!speech || !window.SpeechSynthesisUtterance) {
+      if (!window.speakText) {
         read.disabled = true;
         readChapter.disabled = true;
         status.textContent = "Este navegador no permite leer en voz alta. Puedes seguir leyendo el texto.";
@@ -148,12 +148,6 @@
   function readAloud(mode) {
     if (utterance && readingMode === mode) { stopReading(); return; }
     stopReading();
-    var voices = speech.getVoices();
-    var spanish = voices.filter(function (voice) { return /^es([-_]|$)/i.test(voice.lang); });
-    if (!spanish.length) {
-      status.textContent = "No hay una voz en español disponible en este navegador. Activa una voz en español en el dispositivo e inténtalo de nuevo.";
-      return;
-    }
     readingMode = mode;
     followReading = mode === "chapter";
     var verses = books[book][chapter];
@@ -161,38 +155,39 @@
     var last = mode === "chapter" ? verses.length - 1 : verse;
     // Speak one verse at a time so long chapters do not become one huge utterance.
     function speakNext() {
-    var introduction = mode === "chapter"
-      ? (index === 0 ? names[book] + ", capítulo " + (chapter + 1) + ". " : "")
-      : names[book] + ", capítulo " + (chapter + 1) + ", versículo " + (index + 1) + ". ";
-    var current = new SpeechSynthesisUtterance(introduction + verses[index]);
-    current.voice = spanish[0];
-    current.lang = spanish[0].lang;
-    // A lower pitch and a measured pace give the reading a more solemn tone.
-    current.pitch = 0.7;
-    current.rate = 0.85;
-    current.onstart = function () {
-      if (utterance !== current || mode !== "chapter") return;
-      var passages = content.querySelectorAll(".bible-verse");
-      passages.forEach(function (item, i) { item.classList.toggle("is-reading", i === index); });
-      if (followReading && passages[index]) {
-        passages[index].focus({ preventScroll: true });
-        passages[index].scrollIntoView({ block: "center", behavior: "auto" });
-      }
-    };
-    current.onend = function () {
-      if (utterance !== current) return;
-      if (index < last) { index++; speakNext(); }
-      else stopReading();
-    };
-    current.onerror = function () {
-      if (utterance !== current) return;
-      stopReading();
-      status.textContent = "No se pudo iniciar la lectura. Intenta de nuevo o revisa la voz del dispositivo.";
-    };
-    utterance = current;
-    document.getElementById(mode === "chapter" ? "bible-read-chapter" : "bible-read").textContent = "Detener lectura";
-    status.textContent = mode === "chapter" ? "Leyendo capítulo completo · Versículo " + (index + 1) + " de " + verses.length : "Leyendo versículo " + (index + 1) + "…";
-    try { speech.speak(current); } catch (error) { current.onerror(); }
+      var introduction = mode === "chapter"
+        ? (index === 0 ? names[book] + ", capítulo " + (chapter + 1) + ". " : "")
+        : names[book] + ", capítulo " + (chapter + 1) + ", versículo " + (index + 1) + ". ";
+      var current = {};
+      current.onstart = function () {
+        if (utterance !== current || mode !== "chapter") return;
+        var passages = content.querySelectorAll(".bible-verse");
+        passages.forEach(function (item, i) { item.classList.toggle("is-reading", i === index); });
+        if (followReading && passages[index]) {
+          passages[index].focus({ preventScroll: true });
+          passages[index].scrollIntoView({ block: "center", behavior: "auto" });
+        }
+      };
+      current.onend = function () {
+        if (utterance !== current) return;
+        if (index < last) { index++; speakNext(); }
+        else stopReading();
+      };
+      current.onerror = function (error) {
+        if (utterance !== current) return;
+        stopReading();
+        status.textContent = error && error.message ? error.message : "No se pudo iniciar la lectura. Intenta de nuevo.";
+      };
+      utterance = current;
+      document.getElementById(mode === "chapter" ? "bible-read-chapter" : "bible-read").textContent = "Detener lectura";
+      status.textContent = "Preparando audio…";
+      window.speakText(introduction + verses[index], {
+        onStart: function () {
+          if (utterance !== current) return;
+          status.textContent = "Leyendo versículo " + (index + 1) + (mode === "chapter" ? " de " + verses.length : "") + "…";
+          current.onstart();
+        }, onEnd: current.onend, onError: current.onerror
+      });
     }
     speakNext();
   }
