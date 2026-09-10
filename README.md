@@ -15,6 +15,10 @@ elegido resaltado y visible. Arriba y abajo recorren el texto; OK lleva a los
 controles de lectura, ubicados arriba del texto. Hay dos botones: **Leer
 versículo seleccionado** y **Leer capítulo completo** (desde el versículo 1).
 El botón activo permite detener la lectura; elegir el otro cambia de modo.
+La lectura del capítulo sigue en pantalla cada versículo al comenzar a narrarlo.
+Mover el control, el puntero, tocar la pantalla o usar la rueda desactiva el
+seguimiento durante esa lectura, sin interrumpir la voz. Se activa de nuevo
+al iniciar otra lectura del capítulo.
 
 La lectura en voz alta usa la síntesis de voz del navegador y requiere una voz
 en español en el dispositivo. Si no está disponible, se muestra un aviso.

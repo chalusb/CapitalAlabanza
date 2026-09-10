@@ -26,6 +26,7 @@
 .bible-verse { margin: 0 0 0.7em; padding: 0.5em; border: 3px solid transparent; border-radius: 10px; }
 .bible-verse:last-child { margin-bottom: 0; }
 .bible-verse.is-selected { background: var(--bg-card-selected); border-color: var(--accent); }
+.bible-verse.is-reading { box-shadow: inset 6px 0 var(--accent); background: var(--bg-card-selected); }
 .bible-verse:focus { outline: 3px solid var(--focus-ring); outline-offset: 3px; }
 .bible-verse-number { color: var(--accent); font-family: "Segoe UI", sans-serif; font-size: 0.65em; font-weight: 700; }
 

@@ -7,6 +7,19 @@
   var status = document.getElementById("bible-status");
   var books, loading = false, step = "books", book = 0, chapter = 0, verse = 0;
   var speech = window.speechSynthesis, utterance = null, readingMode = null;
+  var followReading = false;
+
+  function pauseFollowing() {
+    if (readingMode === "chapter") followReading = false;
+  }
+  // Capture input before spatial navigation moves focus. Do not listen to
+  // scroll itself: scrolling performed by the reader must not cancel following.
+  document.addEventListener("keydown", function (event) {
+    if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "PageUp", "PageDown", "Home", "End", "Tab", " "].indexOf(event.key) !== -1) pauseFollowing();
+  }, true);
+  ["wheel", "touchstart", "pointerdown", "pointermove"].forEach(function (type) {
+    document.addEventListener(type, pauseFollowing, { capture: true, passive: true });
+  });
 
   function button(label, action, parent) {
     var el = document.createElement("button");
@@ -21,6 +34,8 @@
     var wasReading = !!utterance;
     utterance = null;
     readingMode = null;
+    followReading = false;
+    content.querySelectorAll(".is-reading").forEach(function (item) { item.classList.remove("is-reading"); });
     if (speech && wasReading) speech.cancel();
     var read = document.getElementById("bible-read");
     if (read) read.textContent = "Leer versículo seleccionado";
@@ -71,7 +86,7 @@
         passage.appendChild(number);
         passage.appendChild(document.createTextNode(words));
         passage.addEventListener("focus", function () {
-          if (verse !== index) stopReading();
+          if (verse !== index && readingMode !== "chapter") stopReading();
           verse = index;
           text.querySelectorAll(".bible-verse").forEach(function (item, i) {
             item.classList.toggle("is-selected", i === verse);
@@ -96,7 +111,7 @@
       var actions = document.createElement("div");
       actions.className = "bible-actions";
       content.insertBefore(actions, text);
-      var prev = button("← Anterior", function () { verse--; render(); }, actions);
+      var prev = button("← Anterior", function () { text.children[verse - 1].focus(); }, actions);
       prev.disabled = verse === 0;
       var read = button("Leer versículo seleccionado", function () { readAloud("verse"); }, actions);
       read.id = "bible-read";
@@ -107,7 +122,7 @@
         readChapter.disabled = true;
         status.textContent = "Este navegador no permite leer en voz alta. Puedes seguir leyendo el texto.";
       }
-      var next = button("Siguiente →", function () { verse++; render(); }, actions);
+      var next = button("Siguiente →", function () { text.children[verse + 1].focus(); }, actions);
       next.disabled = verse === books[book][chapter].length - 1;
       if (!panel.hidden) {
         var selectedPassage = text.children[verse];
@@ -140,6 +155,7 @@
       return;
     }
     readingMode = mode;
+    followReading = mode === "chapter";
     var verses = books[book][chapter];
     var index = mode === "chapter" ? 0 : verse;
     var last = mode === "chapter" ? verses.length - 1 : verse;
@@ -154,6 +170,15 @@
     // A lower pitch and a measured pace give the reading a more solemn tone.
     current.pitch = 0.7;
     current.rate = 0.85;
+    current.onstart = function () {
+      if (utterance !== current || mode !== "chapter") return;
+      var passages = content.querySelectorAll(".bible-verse");
+      passages.forEach(function (item, i) { item.classList.toggle("is-reading", i === index); });
+      if (followReading && passages[index]) {
+        passages[index].focus({ preventScroll: true });
+        passages[index].scrollIntoView({ block: "center", behavior: "auto" });
+      }
+    };
     current.onend = function () {
       if (utterance !== current) return;
       if (index < last) { index++; speakNext(); }
