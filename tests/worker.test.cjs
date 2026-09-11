@@ -10,8 +10,8 @@ async function run(req, env) { return (await worker).default.fetch(req, env); }
 test('Spanish model request returns MP3 without persistent storage', async () => {
   for (const output of [new Uint8Array([73,68,51]), {audio:'SUQz'}, new ReadableStream({start(c) {c.enqueue(new Uint8Array([73,68,51]));c.close();}})]) {
     const response = await run(request(), {AI: {async run(model, input) {
-      assert.equal(model, '@cf/myshell-ai/melotts');
-      assert.deepEqual(input, {prompt:'Jehová es mi pastor.',lang:'es'});
+      assert.equal(model, '@cf/deepgram/aura-2-es');
+      assert.deepEqual(input, {text:'Jehová es mi pastor.',speaker:'sirio',encoding:'mp3'});
       return output;
     }}});
     assert.equal(response.status, 200);

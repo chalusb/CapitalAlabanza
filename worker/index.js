@@ -1,10 +1,10 @@
-const MODEL = "@cf/myshell-ai/melotts";
+const MODEL = "@cf/deepgram/aura-2-es";
 const MAX_TEXT = 2000;
 
 function error(message, status) {
   return Response.json({ error: message }, {
     status,
-    headers: { "Cache-Control": "no-store" }
+    headers: { "Cache-Control": "no-store", "X-TTS-Model": MODEL }
   });
 }
 
@@ -50,8 +50,8 @@ export default {
     if (!env.AI) return error("Falta activar Workers AI en Cloudflare con el nombre AI.", 503);
 
     try {
-      // Explicit Spanish is essential: MeloTTS defaults to English.
-      const result = await env.AI.run(MODEL, { prompt: text, lang: "es" });
+      // Sirio is the Mexican Spanish male baritone voice.
+      const result = await env.AI.run(MODEL, { text, speaker: "sirio", encoding: "mp3" });
       let audio;
       if (result instanceof Response) {
         if (!result.ok || !(result.headers.get("content-type") || "").startsWith("audio/")) {
@@ -68,6 +68,7 @@ export default {
       return new Response(audio, { headers: {
         "Content-Type": "audio/mpeg",
         "Cache-Control": "no-store",
+        "X-TTS-Model": MODEL,
         "X-Content-Type-Options": "nosniff"
       } });
     } catch (cause) {
