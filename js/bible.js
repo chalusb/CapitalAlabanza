@@ -8,6 +8,15 @@
   var books, loading = false, step = "books", book = 0, chapter = 0, verse = 0;
   var utterance = null, readingMode = null;
   var followReading = false;
+  function setAudioLoading(busy) {
+    status.classList.toggle("audio-loading", busy);
+    content.querySelectorAll("#bible-read, #bible-read-chapter").forEach(function (button) {
+      var selected = readingMode === (button.id === "bible-read" ? "verse" : "chapter");
+      button.classList.toggle("is-loading", busy && selected);
+      button.setAttribute("aria-busy", busy && selected ? "true" : "false");
+      if (selected) button.textContent = busy ? "Cancelar carga" : "Detener lectura";
+    });
+  }
 
   function pauseFollowing() {
     if (readingMode === "chapter") followReading = false;
@@ -31,6 +40,7 @@
     return el;
   }
   function stopReading() {
+    setAudioLoading(false);
     var wasReading = !!utterance;
     utterance = null;
     readingMode = null;
@@ -155,9 +165,6 @@
     var last = mode === "chapter" ? verses.length - 1 : verse;
     // Speak one verse at a time so long chapters do not become one huge utterance.
     function speakNext() {
-      var introduction = mode === "chapter"
-        ? (index === 0 ? names[book] + ", capítulo " + (chapter + 1) + ". " : "")
-        : names[book] + ", capítulo " + (chapter + 1) + ", versículo " + (index + 1) + ". ";
       var current = {};
       current.onstart = function () {
         if (utterance !== current || mode !== "chapter") return;
@@ -180,12 +187,23 @@
       };
       utterance = current;
       document.getElementById(mode === "chapter" ? "bible-read-chapter" : "bible-read").textContent = "Detener lectura";
-      status.textContent = "Preparando audio…";
-      window.speakText(introduction + verses[index], {
+      setAudioLoading(true);
+      status.textContent = "Preparando tu lectura…";
+      window.speakText(verses[index], {
+        book: book + 1, chapter: chapter + 1, verse: index + 1,
         onStart: function () {
           if (utterance !== current) return;
+          setAudioLoading(false);
           status.textContent = "Leyendo versículo " + (index + 1) + (mode === "chapter" ? " de " + verses.length : "") + "…";
           current.onstart();
+        }, onBuffer: function () {
+          if (utterance !== current) return;
+          setAudioLoading(true);
+          status.textContent = "Cargando audio…";
+        }, onResume: function () {
+          if (utterance !== current) return;
+          setAudioLoading(false);
+          status.textContent = "Leyendo versículo " + (index + 1) + "…";
         }, onEnd: current.onend, onError: current.onerror
       });
     }

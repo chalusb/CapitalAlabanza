@@ -1,27 +1,26 @@
-// One reusable audio element keeps playback unlocked across verses on TV browsers.
+// On-demand Cloudflare speech: one reusable MP3 player for Fire TV.
 (function () {
   "use strict";
   var audio = new Audio();
   var active = null;
   var unlocked = false;
 
-  function release(job) {
-    clearTimeout(job.timer);
-    if (job.controller) job.controller.abort();
-    if (job.url) { URL.revokeObjectURL(job.url); job.url = null; }
-  }
   function stop() {
     var job = active;
     active = null;
-    audio.onplaying = audio.onended = audio.onerror = null;
+    audio.onplaying = audio.onended = audio.onerror = audio.onwaiting = null;
     audio.pause();
     audio.removeAttribute("src");
     audio.load();
-    if (job) release(job);
+    if (job) {
+      clearTimeout(job.timer);
+      if (job.controller) job.controller.abort();
+      if (job.url) URL.revokeObjectURL(job.url);
+    }
   }
   function unlock() {
     if (unlocked) return;
-    // A short silent WAV is played directly inside the user's click/OK gesture.
+    // Start a short silent WAV in the actual OK/click gesture for TV autoplay.
     var buffer = new ArrayBuffer(2044), view = new DataView(buffer);
     function word(offset, value) {
       for (var i = 0; i < value.length; i++) view.setUint8(offset + i, value.charCodeAt(i));
@@ -41,52 +40,64 @@
     options = options || {};
     stop();
     unlock();
-    var job = { controller: window.AbortController ? new AbortController() : null, url: null };
+    var job = { controller: window.AbortController ? new AbortController() : null };
     active = job;
     function fail(error) {
       if (active !== job) return;
       stop();
       if (options.onError) options.onError(error);
     }
-    job.timer = setTimeout(function () {
-      fail(new Error("El servicio de voz tardó demasiado. Intenta de nuevo."));
-    }, 30000);
+    function waitForAudio() {
+      clearTimeout(job.timer);
+      job.timer = setTimeout(function () {
+        fail(new Error("El audio tardó demasiado en cargar. Intenta de nuevo."));
+      }, 60000);
+    }
+    waitForAudio();
     var request = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ text: text })
+      body: JSON.stringify({ text: text }),
+      cache: "no-store"
     };
     if (job.controller) request.signal = job.controller.signal;
     fetch("/api/tts", request).then(function (response) {
       if (!response.ok) {
-        return response.json().catch(function () { return {}; }).then(function (body) {
-          throw new Error(body.error || "No se pudo generar el audio. Intenta de nuevo.");
+        return response.json().catch(function () { return {}; }).then(function (data) {
+          throw new Error(data.error || "No se pudo generar la voz. Intenta nuevamente.");
         });
       }
       if (!(response.headers.get("Content-Type") || "").includes("audio/")) {
-        throw new Error("El servicio de voz no está disponible en este servidor.");
+        throw new Error("El servicio de voz todavía no está activo en este sitio.");
       }
       return response.blob();
     }).then(function (blob) {
       if (active !== job) return;
-      clearTimeout(job.timer);
+      if (!blob.size) throw new Error("El servicio devolvió un audio vacío. Intenta nuevamente.");
       job.url = URL.createObjectURL(blob);
       audio.src = job.url;
       var started = false;
       audio.onplaying = function () {
-        if (active !== job || started) return;
+        if (active !== job) return;
+        clearTimeout(job.timer);
+        if (started) { if (options.onResume) options.onResume(); return; }
         started = true;
         if (options.onStart) options.onStart();
+      };
+      audio.onwaiting = function () {
+        if (active !== job) return;
+        waitForAudio();
+        if (options.onBuffer) options.onBuffer();
       };
       audio.onended = function () {
         if (active !== job) return;
         stop();
         if (options.onEnd) options.onEnd();
       };
-      audio.onerror = function () { fail(new Error("No se pudo reproducir el audio. Intenta de nuevo.")); };
+      audio.onerror = function () { fail(new Error("No se pudo cargar el audio. Revisa la conexión e intenta de nuevo.")); };
       var promise = audio.play();
       if (promise && promise.catch) promise.catch(function () {
-        fail(new Error("El navegador bloqueó el audio. Pulsa Leer nuevamente con el control."));
+        fail(new Error("No se pudo iniciar el audio. Pulsa Leer nuevamente con el control."));
       });
     }).catch(fail);
     return { stop: function () { if (active === job) stop(); } };

@@ -9,3 +9,6 @@ local-videos
 .dev.vars*
 .env*
 .wrangler/
+tools/qwen/.venv/
+tools/qwen/output/
+tools/qwen/__pycache__/
