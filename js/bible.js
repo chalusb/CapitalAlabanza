@@ -127,7 +127,7 @@
       read.id = "bible-read";
       var readChapter = button("Leer capítulo completo", function () { readAloud("chapter"); }, actions);
       readChapter.id = "bible-read-chapter";
-      if (!window.speakText) {
+      if (!window.speakSequence) {
         read.disabled = true;
         readChapter.disabled = true;
         status.textContent = "Este navegador no permite leer en voz alta. Puedes seguir leyendo el texto.";
@@ -162,9 +162,6 @@
     followReading = mode === "chapter";
     var verses = books[book][chapter];
     var index = mode === "chapter" ? 0 : verse;
-    var last = mode === "chapter" ? verses.length - 1 : verse;
-    // Speak one verse at a time so long chapters do not become one huge utterance.
-    function speakNext() {
       var current = {};
       current.onstart = function () {
         if (utterance !== current || mode !== "chapter") return;
@@ -177,8 +174,7 @@
       };
       current.onend = function () {
         if (utterance !== current) return;
-        if (index < last) { index++; speakNext(); }
-        else stopReading();
+        stopReading();
       };
       current.onerror = function (error) {
         if (utterance !== current) return;
@@ -188,11 +184,11 @@
       utterance = current;
       document.getElementById(mode === "chapter" ? "bible-read-chapter" : "bible-read").textContent = "Detener lectura";
       setAudioLoading(true);
-      status.textContent = "Preparando tu lectura…";
-      window.speakText(verses[index], {
-        book: book + 1, chapter: chapter + 1, verse: index + 1,
-        onStart: function () {
+      status.textContent = mode === "chapter" ? "Preparando lectura continua…" : "Preparando tu lectura…";
+      window.speakSequence(mode === "chapter" ? verses : [verses[index]], {
+        onStart: function (sequenceIndex) {
           if (utterance !== current) return;
+          if (mode === "chapter") index = sequenceIndex;
           setAudioLoading(false);
           status.textContent = "Leyendo versículo " + (index + 1) + (mode === "chapter" ? " de " + verses.length : "") + "…";
           current.onstart();
@@ -206,8 +202,6 @@
           status.textContent = "Leyendo versículo " + (index + 1) + "…";
         }, onEnd: current.onend, onError: current.onerror
       });
-    }
-    speakNext();
   }
   function load() {
     if (loading) return;
