@@ -21,6 +21,7 @@
   function pauseFollowing() {
     if (readingMode === "chapter") followReading = false;
   }
+  document.addEventListener("app:back-to-songs", pauseFollowing);
   // Capture input before spatial navigation moves focus. Do not listen to
   // scroll itself: scrolling performed by the reader must not cancel following.
   document.addEventListener("keydown", function (event) {

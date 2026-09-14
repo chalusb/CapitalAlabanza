@@ -11,7 +11,11 @@
 }
 
 [hidden] { display: none !important; }
-.bible-section { margin-top: 4vh; border-top: 1px solid #35415d; padding-top: 3vh; }
+.bible-section { margin-top: 4vh; border-top: 1px solid #35415d; padding-top: 3vh; padding-right: 64px; }
+#back-to-songs { position: fixed; right: 16px; bottom: 24px; z-index: 15; width: 52px; height: 52px; padding: 0; border: 2px solid var(--accent); border-radius: 50%; background: #171d2e; color: var(--accent); font: 700 30px/1 "Segoe UI", sans-serif; cursor: pointer; box-shadow: 0 4px 16px #0005; }
+#back-to-songs:hover { background: #2a3557; }
+#back-to-songs:focus { outline: 3px solid var(--focus-ring); outline-offset: 4px; }
+#view-selection .site-footer { padding-right: 84px; }
 .bible-toggle { display: flex; justify-content: space-between; align-items: center; width: 100%; text-align: left; }
 .bible-toggle span { margin-left: 1em; color: var(--accent); }
 #bible-panel { padding: 2vh 0.5vw; }

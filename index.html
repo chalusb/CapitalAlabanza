@@ -11,7 +11,7 @@
   <meta property="og:description" content="Selecciona y reproduce las alabanzas de Comunidad Capital, una tras otra y a pantalla completa." />
   <meta property="og:type" content="website" />
   <meta property="og:image" content="assets/logo-white.jpg" />
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/style.css?v=songs-shortcut-1" />
 </head>
 <body>
 
@@ -46,6 +46,9 @@
           <p id="bible-status" role="status" aria-live="polite"></p>
         </div>
       </section>
+      <button id="back-to-songs" type="button" aria-label="Volver a las canciones" title="Volver a las canciones" hidden>
+        <span aria-hidden="true">↑</span>
+      </button>
     </div>
     <div class="site-footer">
       <span>Desarrollado por <a href="https://cssoftware.org" target="_blank" rel="noopener">CSSoftware</a></span>
@@ -95,6 +98,7 @@
 
   <script src="js/app.js"></script>
   <script src="js/tts.js?v=continuous-1"></script>
-  <script src="js/bible.js?v=continuous-1"></script>
+  <script src="js/bible.js?v=songs-shortcut-1"></script>
+  <script src="js/back-to-songs.js"></script>
 </body>
 </html>
