@@ -7,13 +7,13 @@
   function update() {
     var visible = view.classList.contains("active") && grid.getBoundingClientRect().bottom < 0;
     if (!visible && document.activeElement === button) {
-      (grid.querySelector("button") || document.getElementById("count-select")).focus({ preventScroll: true });
+      (grid.querySelector("button") || document.getElementById("shuffle-btn")).focus({ preventScroll: true });
     }
     button.hidden = !visible;
   }
   button.addEventListener("click", function () {
     document.dispatchEvent(new CustomEvent("app:back-to-songs"));
-    (grid.querySelector("button") || document.getElementById("count-select")).focus({ preventScroll: true });
+    (grid.querySelector("button") || document.getElementById("shuffle-btn")).focus({ preventScroll: true });
     window.scrollTo({ top: 0, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
   });
   // Right reaches the shortcut from a verse; Left returns to that verse.

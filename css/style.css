@@ -97,33 +97,6 @@ html, body {
   color: var(--accent);
 }
 
-.count-select-label {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.7vw;
-  font-size: clamp(13px, 1.2vw, 24px);
-  color: var(--text-dim);
-  margin-top: 1.2vh;
-}
-
-#count-select {
-  font-size: clamp(14px, 1.3vw, 26px);
-  font-weight: 700;
-  padding: 0.4em 0.7em;
-  border-radius: 10px;
-  border: 3px solid var(--text-dim);
-  background: var(--bg-card);
-  color: var(--text);
-  cursor: pointer;
-}
-
-#count-select:focus,
-#count-select:focus-visible {
-  outline: none;
-  border-color: var(--focus-ring);
-}
-
 #grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));

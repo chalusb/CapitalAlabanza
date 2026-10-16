@@ -23,12 +23,11 @@
   var seekBar = document.getElementById("seek-bar");
   var progressTime = document.getElementById("progress-time");
   var likeBtn = document.getElementById("like-btn");
-  var countSelect = document.getElementById("count-select");
 
   video.volume = 1;
   video.muted = false;
 
-  var REQUIRED_SELECTIONS = 4;
+  var SHUFFLE_COUNT = 3;
   var HIDE_CONTROLS_DELAY = 2000;
 
   var ICON_PAUSE = '<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>';
@@ -52,15 +51,6 @@
 
   likeBtn.addEventListener("click", function () {
     likeBtn.classList.toggle("liked");
-  });
-
-  countSelect.addEventListener("change", function () {
-    REQUIRED_SELECTIONS = parseInt(countSelect.value, 10);
-    if (selectedOrder.length > REQUIRED_SELECTIONS) {
-      selectedOrder = selectedOrder.slice(0, REQUIRED_SELECTIONS);
-    }
-    refreshBadges();
-    updatePlayButton();
   });
 
   function loadVideos() {
@@ -113,16 +103,12 @@
   function toggleSelect(id, card) {
     var idx = selectedOrder.indexOf(id);
     if (idx === -1) {
-      if (selectedOrder.length >= REQUIRED_SELECTIONS) return;
       selectedOrder.push(id);
     } else {
       selectedOrder.splice(idx, 1);
     }
     refreshBadges();
     updatePlayButton();
-    if (selectedOrder.length === REQUIRED_SELECTIONS) {
-      playBtn.focus();
-    }
   }
 
   function refreshBadges() {
@@ -142,12 +128,12 @@
   }
 
   function updatePlayButton() {
-    var remaining = REQUIRED_SELECTIONS - selectedOrder.length;
-    playBtn.disabled = remaining !== 0;
+    var count = selectedOrder.length;
+    playBtn.disabled = count === 0;
     playBtn.textContent =
-      remaining <= 0
-        ? "▶ Reproducir"
-        : "Selecciona " + remaining + " más";
+      count === 0
+        ? "Selecciona alabanzas"
+        : "▶ Reproducir (" + count + ")";
   }
 
   clearBtn.addEventListener("click", function () {
@@ -157,13 +143,13 @@
   });
 
   playBtn.addEventListener("click", function () {
-    if (selectedOrder.length !== REQUIRED_SELECTIONS) return;
+    if (selectedOrder.length === 0) return;
     beginPlayback(selectedOrder);
   });
 
   shuffleBtn.addEventListener("click", function () {
     if (allVideos.length === 0) return;
-    beginPlayback(pickRandomIds(REQUIRED_SELECTIONS));
+    beginPlayback(pickRandomIds(SHUFFLE_COUNT));
   });
 
   function pickRandomIds(count) {
