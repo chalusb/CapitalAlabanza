@@ -1,5 +1,11 @@
 [
   {
+    "id": "alaba-elevation-worship",
+    "titulo": "Alaba (Praise) — Elevation Worship",
+    "url": "https://videos.cssoftware.org/alaba-elevation-worship.mp4",
+    "nuevoHasta": "2026-12-11"
+  },
+  {
     "id": "alaba-a-dios-danny-berrios",
     "titulo": "Alaba a Dios — Danny Berríos",
     "url": "https://videos.cssoftware.org/alaba-a-dios-danny-berrios.mp4"
@@ -45,6 +51,12 @@
     "url": "https://videos.cssoftware.org/el-dios-que-adoramos.mp4"
   },
   {
+    "id": "eres-todopoderoso-danilo-montero",
+    "titulo": "Eres Todopoderoso — Danilo Montero",
+    "url": "https://videos.cssoftware.org/eres-todopoderoso-danilo-montero.mp4",
+    "nuevoHasta": "2026-12-11"
+  },
+  {
     "id": "exaltate-marcos-witt",
     "titulo": "Exáltate — Marcos Witt",
     "url": "https://videos.cssoftware.org/exaltate-marcos-witt.mp4"
@@ -58,6 +70,18 @@
     "id": "gracia-sublime-es",
     "titulo": "Gracia Sublime Es — En Espíritu y en Verdad",
     "url": "https://videos.cssoftware.org/gracia-sublime-es.mp4"
+  },
+  {
+    "id": "habitacion-en-espiritu-y-en-verdad",
+    "titulo": "Habitación — En Espíritu y en Verdad",
+    "url": "https://videos.cssoftware.org/habitacion-en-espiritu-y-en-verdad.mp4",
+    "nuevoHasta": "2026-12-11"
+  },
+  {
+    "id": "hay-libertad-art-aguilera",
+    "titulo": "Hay Libertad — Art Aguilera",
+    "url": "https://videos.cssoftware.org/hay-libertad-art-aguilera.mp4",
+    "nuevoHasta": "2026-12-11"
   },
   {
     "id": "hermoso-eres-marcos-witt",
@@ -78,6 +102,12 @@
     "id": "la-bondad-de-dios-ileia-sharae",
     "titulo": "La Bondad de Dios — Ileia Sharaé",
     "url": "https://videos.cssoftware.org/la-bondad-de-dios-ileia-sharae.mp4"
+  },
+  {
+    "id": "perfume-a-tus-pies-en-espiritu-y-en-verdad",
+    "titulo": "Perfume a Tus Pies — En Espíritu y en Verdad ft. Jaz Jacobo",
+    "url": "https://videos.cssoftware.org/perfume-a-tus-pies-en-espiritu-y-en-verdad.mp4",
+    "nuevoHasta": "2026-12-11"
   },
   {
     "id": "santo-por-siempre-chris-tomlin-miel-san-marcos",
@@ -103,5 +133,11 @@
     "id": "tu-amor-por-mi-marcos-witt",
     "titulo": "Tu Amor Por Mí — Marcos Witt",
     "url": "https://videos.cssoftware.org/tu-amor-por-mi-marcos-witt.mp4"
+  },
+  {
+    "id": "ven-y-llena-esta-casa-vino-nuevo",
+    "titulo": "Ven y Llena Esta Casa — Vino Nuevo",
+    "url": "https://videos.cssoftware.org/ven-y-llena-esta-casa-vino-nuevo.mp4",
+    "nuevoHasta": "2026-12-11"
   }
 ]

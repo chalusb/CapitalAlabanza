@@ -90,6 +90,7 @@
       card.className = "video-card";
       card.type = "button";
       card.dataset.id = v.id;
+      if (isNew(v)) card.classList.add("is-new");
       card.innerHTML =
         '<span class="badge"></span><span class="title">' + v.titulo + "</span>";
       card.addEventListener("click", function () {
@@ -98,6 +99,14 @@
       grid.appendChild(card);
     });
     updatePlayButton();
+  }
+
+  // "nuevoHasta": "AAAA-MM-DD" en videos.json marca la alabanza como nueva
+  // (borde de otro color) hasta el final de ese dia; despues se ve normal.
+  function isNew(v) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(v.nuevoHasta || "");
+    if (!m) return false;
+    return new Date() < new Date(+m[1], +m[2] - 1, +m[3] + 1);
   }
 
   function toggleSelect(id, card) {

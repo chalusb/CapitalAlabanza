@@ -4,6 +4,7 @@
   --bg-card-selected: #2a3557;
   --accent: #e8a33d;
   --accent-dark: #b8791e;
+  --new: #3cc9a6;
   --text: #f4f1ea;
   --text-dim: #9aa3b8;
   --focus-ring: #ffffff;
@@ -122,6 +123,11 @@ html, body {
   flex-direction: column;
   justify-content: flex-end;
   transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+
+/* Alabanzas recien agregadas (nuevoHasta en videos.json) */
+.video-card.is-new {
+  border-color: var(--new);
 }
 
 .video-card:focus,
